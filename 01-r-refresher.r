@@ -249,6 +249,14 @@ summarize(destinations,
           flights = n()
 )
 
+# also helpful: apply functions to one or more columns
+?summarize_each
+
+summarize_each(dat, funs(mean))
+summarize_each_(dat, funs(mean = mean(., na.rm = TRUE)), vars = c("distance", "arr_delay"))
+
+# here's a useful cheatsheet that points to other useful dplyr functions:
+browseURL("https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf")
 
 
 
@@ -380,63 +388,6 @@ browseURL("https://github.com/sfirke/janitor") # worth a look if you have to dea
 
 
 
-# ************************************************
-# TIDYING MODEL OUTPUT ---------------------------
-
-# overview at
-browseURL("ftp://cran.r-project.org/pub/R/web/packages/broom/vignettes/broom.html")
-browseURL("ftp://cran.r-project.org/pub/R/web/packages/broom/vignettes/broom_and_dplyr.html")
-
-## motivation
-# model inputs usually have to be tidy
-# model outputs less so...
-# this makes dealing with model results (e.g., visualizing coefficients, comparing results across models, etc.) sometimes difficult
-
-## example: linear model output
-model_out <- lm(mpg ~ wt, mtcars) # linear relationship between miles/gallon and weight (in 1000 lbs)
-model_out
-summary(model_out)
-
-# examine model object
-str(model_out)
-coef(summary(model_out)) # matrix of coefficients with variable terms in row names
-broom::tidy(model_out)
-?tidy.lm
-
-# add fitted values and residuals to original data
-broom::augment(model_out) %>% head
-?augment.lm
-
-# inspect summary statistics
-broom::glance(model_out)
-?glance.lm
-
-# many supported models; see
-?tidy # ... and click on "index"
-
-# the true power of broom unfolds in settings where you want to combine results from multiple analyses (using subgroups of data, different models, bootstrap replicates of the original data frame, permutations, imputations, ...)
-
-data(Orange)
-Orange
-
-# inspect relationship between age and circumference
-cor(Orange$age, Orange$circumference) 
-ggplot(Orange, aes(age, circumference, color = Tree)) + geom_line()
-
-# using broom and dplyr together works like a charm
-Orange %>% group_by(Tree) %>% summarize(correlation = cor(age, circumference))
-cor.test(Orange$age, Orange$circumference)
-Orange %>% group_by(Tree) %>% do(tidy(cor.test(.$age, .$circumference)))
-
-# also works for regressions
-Orange %>% group_by(Tree) %>% do(tidy(lm(age ~ circumference, data=.)))
-
-# other examples online
-browseURL("ftp://cran.r-project.org/pub/R/web/packages/broom/vignettes/kmeans.html") # k-means clustering
-browseURL("ftp://cran.r-project.org/pub/R/web/packages/broom/vignettes/bootstrapping.html") # bootstrapping
-
-
-
 
 # ************************************************
 # SPLIT-APPLY-COMBINE WITH BASE R ----------------
@@ -489,6 +440,98 @@ Map(function(x, w) weighted.mean(x, w, na.rm = TRUE), xs, ws)
 # apply function over ragged array with tapply()
 dat <- data.frame(x = 1:20, y = rep(letters[1:5], each = 4))
 tapply(dat$x, dat$y, sum) # data, index, function
+
+
+
+
+# ************************************************
+# FILE MANAGEMENT --------------------------------
+
+# interacting with the file system  can be very useful to keep your research reproducible
+# example tasks:
+# fully implement a workflow based on relative, not absolute paths
+# create a rigid folder structure
+# download files in a specific folder
+# check whether file exists
+# remove temporarily stored files
+
+
+## functions for folder management ---------
+(current_folder <- getwd())
+dir.create("data")
+dir.create("data/r-data")
+
+# get all pre-compiled data sets
+dat <- as.data.frame(data(package = "datasets")$results)
+dat$Item %<>% str_replace(" \\(.+\\)", "")
+
+# store data sets in local folder
+for (i in 1:50) {
+  try(df_out <- dat$Item[i] %>% as.character %>% get)
+  save(df_out, file = paste0("data/r-data/", dat$Item[i], ".RData"))
+}
+
+# inspect folder
+dir("data/r-data")
+filenames <- dir("data/r-data", full.names = TRUE)
+dir("data/r-data", pattern = "US")
+dir("data/r-data", pattern = "US", ignore.case = TRUE)
+
+# check if folder exists
+dir.exists("data")
+
+
+## functions for file management --------
+?files
+
+# get basename (= returns the lowest level in a path)
+filenames
+basename(filenames)
+url <- "http://www.mzes.uni-mannheim.de/d7/en/news/media-coverage/ist-die-wahlforschung-in-der-krise-der-undurchschaubare-buerger"
+browseURL(url)
+basename(url)
+
+# get dirname (returns all but the lower level in a path)
+dirname(url)
+
+# get file information
+file_inf <- file.info(dir(recursive = F))
+?file.info
+file_inf[difftime(Sys.time(), file_inf[,"mtime"], units = "days") < 7 , 1:4]
+
+# identify file extension
+tools::file_ext(filenames)
+
+# check if file exists
+file.exists(filenames)
+file.exists("voterfile.RData")
+
+# rename file
+filenames_lower <- tolower(filenames)
+file.rename(filenames, filenames_lower)
+
+# remove file
+file.remove(filenames_lower[1])
+
+# copy file
+file.copy(filenames_lower[2], to = "copy.rdata")
+file.remove("copy.rdata")
+
+# choose file
+(foo <- file.choose())
+
+# compress and unzip files
+?zip
+?unzip
+?tar
+?untar
+
+# create temporary files or directories
+tempfile()
+tempdir()
+
+
+
 
 
 # ************************************************
@@ -591,6 +634,24 @@ sapply(mtcars, function(x) length(unique(x)))
 
 
 
+
+# ************************************************
+# EXERCISE: DATA FRAME MANAGEMENT -----------------
+
+# 1. Install and load the package "nycflights13"!
+
+# 2. How many variables and observations does the data.frame "flights" from the nycflights13 package contain?
+
+# 3. Select the flights that started from NYC at the first day of each month!
+
+# 4. Sort flights by time of arrival!
+
+# 5. Generate a sub data frame that contains only the department and arrival delay as well as the carrier!
+
+# 6. Which carrier had the biggest department delay on average, which the lowest?
+
+
+
 # ************************************************
 # EXERCISE: VECTORS ------------------------------
 
@@ -613,38 +674,6 @@ gauss(100)
 
 
 
-# ************************************************
-# EXERCISE: DATA FRAME MANAGMENT -----------------
-
-# 1. Install and load the package "nycflights13"!
-library(nycflights13)
-
-# 2. How many variables and observations does the data.frame "flights" from the nycflights13 package contain?
-names(flights)
-View(flights)
-dim(flights)
-nrow(flights)
-ncol(flights)
-
-# 3. Identify the class of every column vector!
-sapply(flights, class)
-
-# 4. Select the flights that started from NYC at the first day of each month!
-head(flights)
-table(flights$origin)
-flights_day1 <- filter(flights, day == 1)
-
-# 5. Sort flights by time of arrival!
-flights_sorted <- arrange(flights, arr_time)
-
-# 6. Generate a sub data frame that contains only the department and arrival delay as well as the carrier!
-flights3 <- select(flights, dep_delay, arr_delay, carrier)
-
-# 7. Which carrier had the biggest department delay on average, which the lowest?
-mean_delay <- tapply(flights$dep_delay, flights$carrier, mean, na.rm = TRUE)
-mean_delay_sorted <- sort(mean_delay, decreasing = TRUE)
-
-
 
 # ************************************************
 # EXERCISE: FUNCTIONS ----------------------------
@@ -659,6 +688,29 @@ mean_delay_sorted <- sort(mean_delay, decreasing = TRUE)
 
 
 
+
+# ************************************************
+# EXERCISE: FILE MANAGEMENT ----------------------
+
+
+# go to the following webpage.
+url <- "http://www.cses.org/datacenter/module4/module4.htm"
+browseURL(url)
+
+# the following piece of code identifies all links to resources on the webpage and selects the subset of links that refers to the survey questionnaire PDFs.
+library(rvest)
+page_links <- read_html(url) %>% html_nodes("a") %>% html_attr("href")
+survey_pdfs <- str_subset(page_links, "/survey")
+
+# set up folder data/cses-pdfs.
+
+# download a sample of 10 of the survey questionnaire PDFs into that folder using a for loop and the download.file() function.
+
+# check if the number of files in the folder corresponds with the number of downloads and list the names of the files.
+
+# inspect the files. which is the largest one?
+
+# zip all files into one zip file.
 
 
 
