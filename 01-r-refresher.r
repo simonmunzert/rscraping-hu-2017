@@ -273,8 +273,7 @@ summary(x)
 # character vectors
 countries <- c("Germany", "France", "Netherlands", "Belgium")
 countries
-paste(countries, collapse = " ")
-paste("Hello", "world!", sep = " ")
+paste("Hello", "world!", sep = ", ")
 paste0("Hello", "world!")
 c(countries, "Poland")
 mode(countries)
@@ -296,15 +295,15 @@ y*3
 # seq and rep
 seq(1, 10, 2)
 seq_along(x)
-rep(c(1, 2, 3), 2)
+rep(c(1, 2, 3), 3)
 rep(c(1, 2, 3), each = 2)
 
 # sorting
 vec1 <- c(2, 20, -5, 1, 200)
 vec2 <- seq(1, 5)
-sort(vec1, decreasing = FALSE) 
+sort(vec1) 
 order(vec1, decreasing = FALSE)
-vec2[order(vec1)]
+vec1[order(vec1)]
 vec3 <- c(1,10,NA,7,NA,11)
 vec4 <- vec3[!is.na(vec3)]
 vec4
@@ -339,14 +338,14 @@ xzz[c(TRUE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE)]
 y
 y[is.na(y)]
 y[!is.na(y)]
-y[y>5 | !is.na(y)]
+y[y>5 | is.na(y)]
 
 countries
 countries[3] <- "Switzerland"
 countries
 
 xzz
-xzz[c(1 ,3 ,5 )] <- c(100,110,120)
+xzz[c(1, 3, 5)] <- c(100,110,120)
 xzz_new <- xzz
 xzz_new[xzz <= 100] <- 0
 xzz_new[xzz > 100] <- 1
@@ -370,6 +369,10 @@ make.names(names(foo_df)) # base R solution - not very convincing
 # convert multiple values to NA
 convert_to_NA(letters[1:5], c("b", "d"))
 convert_to_NA(sample(c(1:5, 98, 99), 20, replace = TRUE), c(98,99))
+foo <- sample(c(1:5, 98, 99), 20, replace = TRUE)
+foo 
+foo[foo == 98 | foo == 99] <- NA
+convert_to_NA(foo, c(98, 99))
 
 # clean frequency tables
 head(mtcars)
@@ -404,6 +407,11 @@ browseURL("https://github.com/sfirke/janitor") # worth a look if you have to dea
 # loop over elements: for (x in xs)
 # loop over numeric indices: for (i in seq_along(xs))
 # loop over the names: for (nm in names())
+sum_vector <- logical()
+for(i in 1:ncol(mtcars)) {
+  sum_vector[i] <- mtcars[,i] %>% is.numeric
+}
+sum_vector
 
 # basic patterns to use lapply():
 lapply(xs, function(x) {})
@@ -414,6 +422,9 @@ lapply(names(xs), function(nm) {})
 a <- matrix(1:20, nrow = 5)
 apply(a, 1, mean)
 apply(a, 2, mean)
+
+apply(mtcars[,c("gear", "carb")], 1, mean)
+select(mtcars, gear, carb) %>% apply(1, mean)
 
 # lapply(): applying a function over a list or vector; returning a list
 # sapply(): applying a function over a list or vector; similar to lapply() but simplifies output to produce an atomic vector
@@ -431,7 +442,6 @@ sapply(mtcars, is.numeric)
 xs <- replicate(5, runif(10), simplify = FALSE)
 ws <- replicate(5, rpois(10, 5) + 1, simplify = FALSE)
 
-vapply(xs, mean, numeric(1))
 Map(weighted.mean, xs, ws) %>% unlist
 
 # if some of the arguments should be fixed and constant, use an anomymous function:
@@ -660,18 +670,22 @@ sapply(mtcars, function(x) length(unique(x)))
 # vector combination
 
 # 1. Create a vector x with elements [0,4,8,12,16,20].
+x <- seq(0, 20, 4)
+x
 
 # 2. Create a vector y with elements [3,3,3,4,4,4,4,5,5,5,5,5].
+y <- c(3,3,3,4,4,4,4,5,5,5,5,5)
+rep(c(3, 4, 5), c(3, 4, 5))
 
-# 3. Combine the first five elements of x mit elements 2 to 12 of vector y to create a new vector z.
+# 3. Combine the first five elements of x with elements 2 to 12 of vector y to create a new vector z.
+z <- c(x[1:5], y[2:12])
 
 # 4. What's the sum of all numbers between 1 and 100?
-
-gauss <- function(n) (n*(n+1))/2
-gauss(100)
+seq(1, 100) %>% sum()
+sum(1:100)
 
 # 5. What's the sum of all odd numbers between 1 and 100 squared?
-
+seq(1, 100, 2)^2 %>% sum
 
 
 
@@ -712,22 +726,3 @@ survey_pdfs <- str_subset(page_links, "/survey")
 
 # zip all files into one zip file.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-b
