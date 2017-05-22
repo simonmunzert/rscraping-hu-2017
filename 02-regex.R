@@ -12,7 +12,7 @@ source("functions.r")
 ## string basics -----------------
 
 # to create strings, both single and double quotes work
-string1 <- "This is a string"
+string1 <- 'This is a string'
 string2 <- 'If I want to include a "quote" inside a string, I use single quotes'
 
 # to include a literal single or double quote in a string you can use \ to escape it:
@@ -52,6 +52,7 @@ phone <- unlist(str_extract_all(raw.data, "\\(?(\\d{3})?\\)?(-| )?\\d{3}(-| )?\\
 phone
 data.frame(name = name, phone = phone)
 
+
 # running example
 example.obj <- "1. A small sentence. - 2. Another tiny sentence."
 
@@ -66,7 +67,7 @@ str_extract(example.obj, "banana")
 str_extract(example.obj, "small")
 str_extract(example.obj, "SMALL")
 str_extract(example.obj, ignore.case("SMALL")) # wrong
-str_extract(example.obj, regex("SMALL", ignore_case =TRUE))
+str_extract(example.obj, regex("SMALL", ignore_case = TRUE))
 
 # match empty space
 str_extract(example.obj, "mall sent")
