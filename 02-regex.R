@@ -234,8 +234,8 @@ str_c(char.vec, collapse = "\n") %>% cat
 str_c("text", c("manipulation", "basics"), sep = " ")
 
 # approximate matching
-agrep("Donald Trump", "Donald Drumpf", max.distance = list(all = 3))
-agrep("Donald Trump", "Barack Obama", max.distance = list(all = 3))
+agrepl("Donald Trump", "Donald Drumpf", max.distance = list(all = 3))
+agrepl("Donald Trump", "Barack Obama", max.distance = list(all = 3))
 
 
 
