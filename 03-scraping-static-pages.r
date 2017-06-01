@@ -114,12 +114,12 @@ headings_nodes <- html_nodes(url_parsed, css = ".story-heading")
 
 # 4. extract content from nodes
 headings <- html_text(headings_nodes)
-headings <- str_replace_all(headings, "\\n|\\t", "") %>% str_trim()
+headings <- str_replace_all(headings, "\\n|\\t|\\r", "") %>% str_trim()
 head(headings)
 length(headings)
 str_detect(headings, "Trump") %>% table()
 
-read_html("https://www.nytimes.com") %>% html_nodes(css = ".story-heading") %>% html_text() -> headlines
+headlines <- read_html("https://www.nytimes.com") %>% html_nodes(css = ".story-heading") %>% html_text()
 
 
 
@@ -375,12 +375,17 @@ browseURL("https://www.jstatsoft.org/about/editorialTeam")
 
 # 3. revisit the jstatsoft.org website from above and use rvest to extract the names! Bonus: try and extract the full lines including the affiliation, and count how many of the editors are at a statistics or mathematics department or institution!
 url <- "https://www.jstatsoft.org/about/editorialTeam"
-read_html(url) %>% html_nodes(css = "ol.editorialTeam a") %>% html_text()
+
+read_html(url) %>% html_nodes(css = "a") %>% html_text()
 
 # 4. scrape the table tall buildings (300m+) currently under construction from the following page. How many of those buildings are currently built in China? and in which city are most of the tallest buildings currently built?
 browseURL("https://en.wikipedia.org/wiki/List_of_tallest_buildings_in_the_world")
 
-# 5. use SelectorGadget to identify a CSS selector that helps extract all article author names from Buzzfeed's main page! Next, use rvest to scrape these names!
+# 5. Go to http://en.wikipedia.org/wiki/List_of_MPs_elected_in_the_United_Kingdom_general_election,_1992 and extract the table containing the elected MPs int the United Kingdom general election of 1992. Which party has most Sirs?
 
-# 6. Go to http://earthquaketrack.com/ and make a request for data on earthquakes in "Florence, Italy". Try to parse the results into one character vector! Hint: After filling out a form, you might have to look for a follow-up URL and parse it in a second step to arrive at the data you need.
+# 6. Create code that scrapes and cleans all headlines from the main pages of sueddeutsche.de and spiegel.de!
+
+# 7. use SelectorGadget to identify a CSS selector that helps extract all article author names from Buzzfeed's main page! Next, use rvest to scrape these names!
+
+# 8. Go to http://earthquaketrack.com/ and make a request for data on earthquakes in "Florence, Italy". Try to parse the results into one character vector! Hint: After filling out a form, you might have to look for a follow-up URL and parse it in a second step to arrive at the data you need.
 
