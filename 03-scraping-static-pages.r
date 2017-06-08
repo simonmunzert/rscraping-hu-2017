@@ -376,8 +376,6 @@ browseURL("https://www.jstatsoft.org/about/editorialTeam")
 # 3. revisit the jstatsoft.org website from above and use rvest to extract the names! Bonus: try and extract the full lines including the affiliation, and count how many of the editors are at a statistics or mathematics department or institution!
 url <- "https://www.jstatsoft.org/about/editorialTeam"
 
-read_html(url) %>% html_nodes(css = "a") %>% html_text()
-
 # 4. scrape the table tall buildings (300m+) currently under construction from the following page. How many of those buildings are currently built in China? and in which city are most of the tallest buildings currently built?
 browseURL("https://en.wikipedia.org/wiki/List_of_tallest_buildings_in_the_world")
 
@@ -388,4 +386,6 @@ browseURL("https://en.wikipedia.org/wiki/List_of_tallest_buildings_in_the_world"
 # 7. use SelectorGadget to identify a CSS selector that helps extract all article author names from Buzzfeed's main page! Next, use rvest to scrape these names!
 
 # 8. Go to http://earthquaketrack.com/ and make a request for data on earthquakes in "Florence, Italy". Try to parse the results into one character vector! Hint: After filling out a form, you might have to look for a follow-up URL and parse it in a second step to arrive at the data you need.
+
+# 9. The English Wikipedia features an entry with a list of political scientists around the world: https://en.wikipedia.org/wiki/List_of_political_scientists. Make use of this list to (1) download all articles of the listed scientists to your hard drive, (2) gather the network structure behind these articles and visualize it, and (3) identify the top 10 of political scientists that have the most links from other political scientists pointing to their page!
 
