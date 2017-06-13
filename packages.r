@@ -1,7 +1,8 @@
 
 # install packages from CRAN
 p_needed <- c("rvest",
-  "readr", # imports spreadsheet data
+              "httr",
+              "readr", # imports spreadsheet data
               "haven", # imports SPSS, Stata and SAS files
               "magrittr", #  for piping
               "plyr", # for consistent split-apply-combines
