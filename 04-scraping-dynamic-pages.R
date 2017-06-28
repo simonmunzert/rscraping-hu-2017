@@ -16,7 +16,7 @@ source("functions.r")
 browseURL("http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html")
 
 # install current version of Firefox browser
-browseURL("https://www.mozilla.org/en-US/firefox/new/") # might not always work, probably go with version 48 instead?
+browseURL("https://www.mozilla.org/en-US/firefox/new/")
 
 # install dev version of RSelenium
 devtools::install_github("ropensci/RSelenium")
