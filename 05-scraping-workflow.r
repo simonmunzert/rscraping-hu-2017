@@ -19,6 +19,8 @@ source("functions.r")
 # add header fields with httr::GET
 browseURL("http://httpbin.org")
 GET("http://httpbin.org/headers")
+GET("http://httpbin.org/headers", add_headers(`User-Agent` = R.Version()$version.string))
+
 GET("http://httpbin.org/headers", add_headers(From = "my@email.com"))
 GET("http://httpbin.org/headers", add_headers(From = "my@email.com",
                                               `User-Agent` = R.Version()$version.string))
@@ -52,6 +54,8 @@ browseURL("http://www.nytimes.com/robots.txt")
 library(robotstxt)
 # more info see here: https://cran.r-project.org/web/packages/robotstxt/vignettes/using_robotstxt.html
 paths_allowed("/", "http://google.com/", bot = "*")
+paths_allowed("/", "https://facebook.com/", bot = "*")
+
 paths_allowed("/imgres", "http://google.com/", bot = "*")
 paths_allowed("/imgres", "http://google.com/", bot = "Twitterbot")
 
