@@ -70,10 +70,17 @@ ip_parsed %>% unlist %>% t %>% as.data.frame(stringsAsFactors = FALSE)
 
 # 1. familiarize yourself with the OpenWeatherMap API!
 browseURL("http://openweathermap.org/current")
-# 2. sign up for the API at the address below and obtain an API key!
+# a) sign up for the API (the FREE version only!!) at the address below and obtain an API key!
 browseURL("http://openweathermap.org/api")
-# 3. make a call to the API to find out the current weather conditions in Berlin!
+# b) make a call to the API to find out the current weather conditions in Berlin!
 
+# 4. the following script showcases how to access the New York Times API:
+browseURL("http://pablobarbera.com/big-data-upf/html/01c-apis.html")
+# work through it and make some adaptations to track issues, topics of events of your interest!
+
+# 5.  there's an R wrapper for the ZEIT ONLINE Content API:
+browseURL("https://cran.r-project.org/web/packages/diezeit/index.html")
+# find out how it works and build a useful showcase!
 
 
 
