@@ -63,6 +63,11 @@ url <- "http://ip-api.com/json"
 ip_parsed <- jsonlite::fromJSON(url)
 ip_parsed %>% unlist %>% t %>% as.data.frame(stringsAsFactors = FALSE)
 
+# modify call
+fromJSON("http://ip-api.com/json/72.33.67.89") %>% unlist %>% t %>% as.data.frame(stringsAsFactors = FALSE)
+fromJSON("http://ip-api.com/json/www.spiegel.de") %>% unlist %>% t %>% as.data.frame(stringsAsFactors = FALSE)
+
+
 
 #######################
 ### IT'S YOUR SHOT! ###
