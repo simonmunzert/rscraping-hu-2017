@@ -85,8 +85,8 @@ browseURL(url)
 html <- read_html(url)
 anchors <- html_nodes(html, xpath = "//ul/li/a[1]")
 links <- html_attr(anchors, "href")
-links <- links[!is.na(links)]
 
+links <- links[!is.na(links)]
 links_iffer <-
   seq_along(links) >=
   seq_along(links)[str_detect(links, "Odd_Aalen")] &

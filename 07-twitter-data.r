@@ -53,7 +53,7 @@ twitter_token <- create_token(
 
 rt <- search_tweets("merkel", n = 1000, include_rts = TRUE, lang = "de", token = twitter_token)
 tauber_bad <- search_tweets(URLencode("tauber :("), n = 100, include_rts = FALSE, lang = "de", token = twitter_token)
-tauber_good <- search_tweets(URLencode("tauber :("), n = 100, include_rts = FALSE, lang = "de", token = twitter_token)
+tauber_good <- search_tweets(URLencode("tauber :)"), n = 100, include_rts = FALSE, lang = "de", token = twitter_token)
 tauber_good <- search_tweets(URLencode("tauber filter:images"), n = 100, include_rts = FALSE, lang = "de", token = twitter_token)
 
 names(rt)
@@ -109,10 +109,10 @@ users_data(rt) %>% names()
 
 ## mining tweets with the rtweet package ------
 
-rt <- parse_stream("data/rtweet-data/clintontrump_2017-05-19-16-27-32.json")
-clinton <- str_detect(rt$text, regex("hillary|clinton", ignore_case = TRUE))
-trump <- str_detect(rt$text, regex("donald|trump", ignore_case = TRUE))
-mentions_df <- data.frame(clinton,trump)
+rt <- parse_stream("data/rtweet-data/btw17_2017-07-03-13-02-52.json")
+merkel <- str_detect(rt$text, regex("merkel", ignore_case = TRUE))
+schulz <- str_detect(rt$text, regex("schulz", ignore_case = TRUE))
+mentions_df <- data.frame(merkel,schulz)
 colMeans(mentions_df, na.rm = TRUE)
 
 
